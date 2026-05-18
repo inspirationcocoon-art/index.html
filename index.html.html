@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MáqPro — Sistema de Gestão</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   VARS + RESET
+══════════════════════════════════════════ */
+:root{
+  --bg:#F4F2ED;
+  --surface:#FFFFFF;
+  --surface2:#EDEBE5;
+  --border:#DDD9CE;
+  --text:#1C1A16;
+  --text2:#6B6760;
+  --text3:#A09D96;
+  --accent:#C85A1A;
+  --accent-l:#FDF0E8;
+  --accent-b:#F0C4A0;
+  --green:#1A6B40;
+  --green-l:#E8F5EE;
+  --red:#B83030;
+  --red-l:#FCEAEA;
+  --amber:#8A5A10;
+  --amber-l:#FDF3E0;
+  --blue:#1A3A7A;
+  --blue-l:#EBF0FA;
+  --r:10px;
+  --r-sm:6px;
+  --sidebar:240px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+
+/* ══════════════════════════════════════════
+   SHELL — SIDEBAR + MAIN
+══════════════════════════════════════════ */
+#shell{display:flex;height:100vh;width:100vw;overflow:hidden}
+
+/* ══════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════ */
+#sidebar{
+  width:var(--sidebar);
+  flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  overflow:hidden;
+}
+.sb-logo{
+  padding:18px 16px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.sb-logo-icon{
+  width:32px;height:32px;
+  border-radius:8px;
+  background:var(--accent);
+  color:white;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;
+  font-size:13px;font-weight:700;
+  flex-shrink:0;
+}
+.sb-logo-text{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.sb-logo-text span{color:var(--accent)}
+.sb-logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
+
+.sb-nav{flex:1;overflow-y:auto;padding:10px 8px}
+.sb-section{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:12px 8px 4px;font-family:'Syne',sans-serif}
+.sb-btn{
+  display:flex;align-items:center;gap:9px;
+  width:100%;padding:8px 10px;
+  border:none;background:none;
+  border-radius:var(--r-sm);
+  font-size:13px;font-family:'Inter',sans-serif;
+  color:var(--text2);cursor:pointer;text-align:left;
+  transition:all .12s;margin-bottom:1px;
+}
+.sb-btn:hover{background:var(--surface2);color:var(--text)}
+.sb-btn.active{background:var(--accent-l);color:var(--accent);font-weight:500}
+.sb-btn .ico{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:600;padding:1px 6px;border-radius:99px}
+
+.sb-footer{padding:12px 16px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:9px}
+.sb-av{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent);color:white;
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;flex-shrink:0;
+}
+.sb-name{font-size:12px;font-weight:500;color:var(--text);line-height:1.2}
+.sb-role{font-size:10px;color:var(--text3)}
+
+/* ══════════════════════════════════════════
+   MAIN
+══════════════════════════════════════════ */
+#main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  overflow:hidden;
+  min-width:0;
+  background:var(--bg);
+}
+
+/* TOPBAR */
+.topbar{
+  height:52px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+  flex-shrink:0;
+}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.back-btn{
+  width:30px;height:30px;border-radius:6px;
+  border:1px solid var(--border);background:none;
+  color:var(--text2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.back-btn:hover{background:var(--surface2)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--text)}
+.topbar-actions{display:flex;gap:8px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:500;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--text2);transition:all .12s;font-family:'Inter',sans-serif;
+}
+.btn:hover{background:var(--surface2);color:var(--text)}
+.btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
+.btn-primary:hover{background:#B5501A;color:white}
+.btn-green{background:var(--green);color:white;border-color:var(--green)}
+
+/* SCROLL AREA */
+.scroll{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  padding:24px;
+}
+
+/* ══════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════ */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ══════════════════════════════════════════
+   COMPONENTS
+══════════════════════════════════════════ */
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px}
+.kpi-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.kpi-value{font-size:24px;font-weight:600;color:var(--text);font-family:'Syne',sans-serif;letter-spacing:-.5px}
+.kpi-sub{font-size:12px;color:var(--text3);margin-top:4px}
+.kpi.accent{background:var(--accent);border-color:var(--accent)}
+.kpi.accent .kpi-label,.kpi.accent .kpi-value,.kpi.accent .kpi-sub{color:white}
+
+/* GRID 2 COL */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.card-header{
+  padding:13px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{font-size:13px;font-weight:600;color:var(--text);font-family:'Syne',sans-serif}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{
+  padding:9px 14px;text-align:left;
+  font-size:10.5px;font-weight:600;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.06em;
+  background:var(--surface2);border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surface2)}
+tbody td{padding:10px 14px;vertical-align:middle;color:var(--text)}
+.td-muted{color:var(--text2);font-size:12px}
+.td-mono{font-family:'Syne',sans-serif;font-size:12px}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px;line-height:1.4}
+.b-green{background:var(--green-l);color:var(--green)}
+.b-red{background:var(--red-l);color:var(--red)}
+.b-amber{background:var(--amber-l);color:var(--amber)}
+.b-blue{background:var(--blue-l);color:var(--blue)}
+.b-gray{background:var(--surface2);color:var(--text2)}
+
+/* ROW ACTIONS */
+.row-acts{display:flex;gap:6px}
+.ra-btn{
+  padding:4px 10px;border-radius:4px;
+  border:1px solid var(--border);background:none;
+  cursor:pointer;font-size:12px;color:var(--text2);
+  font-family:'Inter',sans-serif;transition:all .12s;
+}
+.ra-btn:hover{background:var(--surface2);color:var(--text)}
+.ra-btn.primary{color:var(--accent);border-color:var(--accent-b)}
+.ra-btn.primary:hover{background:var(--accent-l)}
+.ra-btn.green{color:var(--green);border-color:#90CCA8}
+.ra-btn.green:hover{background:var(--green-l)}
+.ra-btn.danger:hover{background:var(--red-l);color:var(--red);border-color:#F0AAAA}
+
+/* ALERT */
+.alert{display:flex;gap:10px;padding:12px 16px;border-radius:var(--r-sm);font-size:13px;margin-bottom:16px;line-height:1.5}
+.alert-warn{background:var(--amber-l);border:1px solid #E8C070;color:var(--amber)}
+.alert-info{background:var(--blue-l);border:1px solid #A0B8E0;color:var(--blue)}
+.alert-green{background:var(--green-l);border:1px solid #90CCA8;color:var(--green)}
+
+/* CHART */
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:80px}
+.bar-grp{display:flex;gap:2px;align-items:flex-end;flex:1}
+.bar{border-radius:3px 3px 0 0;min-width:10px}
+.chart-labels{display:flex;margin-top:6px}
+.chart-lbl{font-size:10px;color:var(--text3);flex:1;text-align:center}
+.legend-row{display:flex;gap:14px;margin-top:10px}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.leg-dot{width:8px;height:8px;border-radius:2px}
+
+/* PROGRESS */
+.prog-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.prog-lbl{font-size:12px;color:var(--text2);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog-track{flex:1;height:5px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px}
+.prog-pct{font-size:11px;color:var(--text3);width:32px;text-align:right;flex-shrink:0}
+
+/* NOTIF */
+.notif{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+.notif:last-child{border-bottom:none}
+.notif-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.notif-text{font-size:13px;color:var(--text);line-height:1.5;flex:1}
+.notif-time{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* STATUS STRIPE */
+.stripe-disponivel{border-left:3px solid var(--green)}
+.stripe-locada{border-left:3px solid var(--amber)}
+.stripe-manutencao{border-left:3px solid var(--red)}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:var(--text3)}
+.empty-ico{font-size:40px;margin-bottom:12px}
+.empty p{font-size:13px;line-height:1.6}
+
+/* FORM */
+.form-wrap{max-width:720px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;font-family:'Syne',sans-serif}
+.field input,.field select,.field textarea{
+  padding:9px 12px;
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  font-size:13px;color:var(--text);font-family:'Inter',sans-serif;
+  background:var(--surface);outline:none;transition:border-color .12s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:80px;font-size:13px}
+.field-full{grid-column:1/-1}
+.form-section{
+  font-size:10px;font-weight:600;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.09em;
+  margin:20px 0 14px;padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  grid-column:1/-1;font-family:'Syne',sans-serif;
+}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* DETAIL */
+.detail-hero{margin-bottom:20px}
+.detail-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.4px;margin-bottom:4px}
+.detail-sub{font-size:13px;color:var(--text2);margin-bottom:10px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.info-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.info-block-title{padding:10px 14px;font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);background:var(--surface2);font-family:'Syne',sans-serif}
+.info-row{display:flex;padding:9px 14px;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-label{font-size:12px;color:var(--text2);width:120px;flex-shrink:0}
+.info-val{font-size:13px;color:var(--text);flex:1;font-weight:500}
+.detail-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+
+/* FIN TABS */
+.ftabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.ftab{padding:8px 16px;font-size:13px;color:var(--text2);cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;font-family:'Inter',sans-serif;transition:all .12s}
+.ftab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+
+/* ══════════════════════════════════════════
+   CONTRATO
+══════════════════════════════════════════ */
+.contract-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.4);z-index:9000;
+  align-items:flex-start;justify-content:center;
+  overflow-y:auto;padding:24px;
+}
+.contract-overlay.open{display:flex}
+.contract-box{
+  background:white;border-radius:var(--r);
+  width:100%;max-width:760px;
+  margin:0 auto;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+.ctopbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;background:#1C1A16;
+  position:sticky;top:0;z-index:10;
+}
+.ctopbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:white}
+.ctb-btn{padding:7px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:none;font-size:12px;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;color:white}
+.ctb-btn:hover{background:rgba(255,255,255,.1)}
+.ctb-btn.primary{background:var(--accent);border-color:var(--accent)}
+.cdoc-header{background:#1C1A16;color:white;padding:24px;text-align:center}
+.cdoc-empresa{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.3px}
+.cdoc-empresa-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px}
+.cdoc-title-wrap{background:var(--accent);padding:12px 24px;text-align:center}
+.cdoc-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:.12em}
+.cdoc-num{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+.cdoc-body{padding:24px}
+.cdoc-sec{margin-bottom:20px}
+.cdoc-sec-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);border-bottom:1px solid #EDEBE5;padding-bottom:6px;margin-bottom:10px}
+.cdoc-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid #F0EDE8;font-size:13px}
+.cdoc-row:last-child{border-bottom:none}
+.cdoc-lbl{color:#6B6760;width:130px;flex-shrink:0}
+.cdoc-val{font-weight:500;color:#1C1A16;text-align:right;flex:1}
+.cdoc-hi{background:#FDF0E8;border:1px solid #F0C4A0;border-radius:8px;padding:14px 16px;margin-bottom:16px}
+.cdoc-hi-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.cdoc-hi-row{display:flex;justify-content:space-between;font-size:13px;color:#1C1A16;padding:3px 0}
+.cdoc-hi-row.total{font-weight:700;font-family:'Syne',sans-serif;font-size:16px;border-top:1px solid #F0C4A0;margin-top:6px;padding-top:8px;color:var(--accent)}
+.cdoc-clause{font-size:12px;color:#4A4844;line-height:1.75;margin-bottom:10px;text-align:justify}
+.cdoc-clause strong{color:#1C1A16}
+
+/* ASSINATURA */
+.sign-wrap{padding:0 24px 24px}
+.sign-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);border-bottom:1px solid #EDEBE5;padding-bottom:6px;margin-bottom:16px}
+.sign-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.sign-field label{display:block;font-size:11px;font-weight:600;color:#6B6760;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;font-family:'Syne',sans-serif}
+.sign-field input{width:100%;padding:10px 12px;border:1px solid #DDD9CE;border-radius:6px;font-size:13px;font-family:'Inter',sans-serif;color:#1C1A16;outline:none}
+.sign-field input:focus{border-color:var(--accent)}
+.sign-canvas-wrap{border:2px dashed #DDD9CE;border-radius:8px;background:#FAFAF8;position:relative;margin-bottom:8px}
+.sign-canvas{display:block;width:100%;cursor:crosshair;touch-action:none}
+.sign-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.sign-ph span{font-size:13px;color:#A09D96;font-family:'Syne',sans-serif}
+.sign-footer{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sign-clear{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600}
+.sign-confirm{padding:12px 24px;background:var(--green);color:white;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.sign-confirm:hover{opacity:.9}
+.sign-stamp{background:#E8F5EE;border:2px solid var(--green);border-radius:8px;padding:16px;text-align:center;margin-bottom:16px}
+.sign-stamp-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green);margin-bottom:6px}
+.sign-stamp-img{max-width:220px;max-height:65px;margin:8px auto;display:block;border:.5px solid #90CCA8;border-radius:4px}
+.sign-stamp-sub{font-size:12px;color:var(--green)}
+
+/* CONFIG */
+.config-wrap{max-width:640px}
+.config-success{background:var(--green-l);border:1px solid #90CCA8;border-radius:var(--r-sm);padding:12px 16px;font-size:13px;color:var(--green);margin-top:14px;display:none}
+
+/* SEARCH */
+.search-box{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface2)}
+.search-box input{border:none;background:none;font-size:12px;color:var(--text);outline:none;font-family:'Inter',sans-serif;width:160px}
+.search-box input::placeholder{color:var(--text3)}
+</style>
+</head>
+<body>
+
+<div id="shell">
+
+  <!-- ══ SIDEBAR ══ -->
+  <div id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">M</div>
+      <div>
+        <div class="sb-logo-text">Máq<span>Pro</span></div>
+        <div class="sb-logo-sub">Gestão de locações</div>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <button class="sb-btn active" onclick="goScreen('dash',this)"><span class="ico">⊞</span> Dashboard</button>
+
+      <div class="sb-section">Operacional</div>
+      <button class="sb-btn" onclick="goScreen('maq',this)"><span class="ico">⚙</span> Máquinas</button>
+      <button class="sb-btn" onclick="goScreen('loc',this)"><span class="ico">📋</span> Locações <span class="sb-badge" id="badge-loc" style="display:none">0</span></button>
+      <button class="sb-btn" onclick="goScreen('man',this)"><span class="ico">🔧</span> Manutenção</button>
+
+      <div class="sb-section">Gestão</div>
+      <button class="sb-btn" onclick="goScreen('fin',this)"><span class="ico">💰</span> Financeiro</button>
+      <button class="sb-btn" onclick="goScreen('comp',this)"><span class="ico">🛒</span> Compras</button>
+      <button class="sb-btn" onclick="goScreen('rh',this)"><span class="ico">👥</span> RH</button>
+      <button class="sb-btn" onclick="goScreen('cli',this)"><span class="ico">🏗</span> Clientes</button>
+
+      <div class="sb-section">Sistema</div>
+      <button class="sb-btn" onclick="goScreen('config',this)"><span class="ico">⚙️</span> Configurações</button>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-av" id="av-init">MP</div>
+        <div>
+          <div class="sb-name" id="av-nome">MáqPro</div>
+          <div class="sb-role">Administrador</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN ══ -->
+  <div id="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="back-btn" id="back-btn" style="display:none" onclick="goBack()">←</button>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+      </div>
+      <div class="topbar-actions" id="topbar-actions"></div>
+    </div>
+
+    <!-- Scroll -->
+    <div class="scroll" id="scroll-area">
+
+      <!-- DASHBOARD -->
+      <div class="screen active" id="screen-dash">
+        <div class="alert alert-info" id="dash-alert" style="display:none"></div>
+        <div class="kpi-grid">
+          <div class="kpi accent"><div class="kpi-label">Faturamento</div><div class="kpi-value" id="k-fat">R$0</div><div class="kpi-sub">entradas registradas</div></div>
+          <div class="kpi"><div class="kpi-label">Máquinas</div><div class="kpi-value" id="k-maq">0/0</div><div class="kpi-sub" id="k-ocp">locadas</div></div>
+          <div class="kpi"><div class="kpi-label">Funcionários</div><div class="kpi-value" id="k-func">0</div><div class="kpi-sub">ativos</div></div>
+          <div class="kpi"><div class="kpi-label">Manutenções</div><div class="kpi-value" id="k-manut">0</div><div class="kpi-sub">pendentes</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-header"><div class="card-title">Receitas vs Despesas</div></div>
+            <div style="padding:16px 18px">
+              <div class="chart-bars" id="dash-chart"></div>
+              <div class="chart-labels" id="dash-chart-lbl"></div>
+              <div class="legend-row">
+                <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Entradas</div>
+                <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>Saídas</div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-header"><div class="card-title">Ocupação das máquinas</div></div>
+            <div style="padding:16px 18px" id="dash-ocp"></div>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-header">
+              <div class="card-title">Locações ativas</div>
+              <button class="btn" style="font-size:12px;padding:4px 10px" onclick="goScreen('loc',null)">Ver todas</button>
+            </div>
+            <table><thead><tr><th>Contrato</th><th>Cliente</th><th>Máquina</th><th>Retorno</th><th>Status</th></tr></thead>
+            <tbody id="dash-loc-table"></tbody></table>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-header"><div class="card-title">Alertas e avisos</div></div>
+            <div style="padding:4px 18px 14px" id="dash-notifs"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÁQUINAS -->
+      <div class="screen" id="screen-maq">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Equipamentos cadastrados</div>
+            <div class="search-box"><input type="text" placeholder="Buscar máquina…" oninput="searchTable('maq',this.value)"></div>
+          </div>
+          <table><thead><tr><th>Código</th><th>Equipamento</th><th>Categoria</th><th>Estado</th><th>Diária</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-maq"></tbody></table>
+        </div>
+      </div>
+
+      <!-- LOCAÇÕES -->
+      <div class="screen" id="screen-loc">
+        <div class="ftabs" id="loc-tabs">
+          <button class="ftab active" onclick="filterLoc('todas',this)">Todas</button>
+          <button class="ftab" onclick="filterLoc('ativa',this)">Ativas</button>
+          <button class="ftab" onclick="filterLoc('atrasada',this)">Atrasadas</button>
+          <button class="ftab" onclick="filterLoc('encerrada',this)">Encerradas</button>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Contratos</div>
+            <div class="search-box"><input type="text" placeholder="Buscar cliente ou máquina…" oninput="searchTable('loc',this.value)"></div>
+          </div>
+          <table><thead><tr><th>Contrato</th><th>Cliente</th><th>Máquina</th><th>Saída</th><th>Retorno</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-loc"></tbody></table>
+        </div>
+      </div>
+
+      <!-- MANUTENÇÃO -->
+      <div class="screen" id="screen-man">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Histórico de manutenções</div></div>
+          <table><thead><tr><th>Máquina</th><th>Tipo</th><th>Serviço</th><th>Data</th><th>Próx. Prev.</th><th>Custo</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-man"></tbody></table>
+        </div>
+      </div>
+
+      <!-- FINANCEIRO -->
+      <div class="screen" id="screen-fin">
+        <div class="grid-3">
+          <div class="kpi"><div class="kpi-label">Entradas</div><div class="kpi-value" style="color:var(--green)" id="fin-ent">R$0</div></div>
+          <div class="kpi"><div class="kpi-label">Saídas</div><div class="kpi-value" style="color:var(--red)" id="fin-sai">R$0</div></div>
+          <div class="kpi"><div class="kpi-label">Saldo</div><div class="kpi-value" id="fin-sal">R$0</div></div>
+        </div>
+        <div class="ftabs" id="fin-tabs">
+          <button class="ftab active" onclick="filterFin('todos',this)">Todos</button>
+          <button class="ftab" onclick="filterFin('entrada',this)">Entradas</button>
+          <button class="ftab" onclick="filterFin('saida',this)">Saídas</button>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Lançamentos</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="openForm('fin-saida')">+ Saída</button>
+            <button class="btn btn-primary" onclick="openForm('fin-entrada')">+ Entrada</button>
+          </div></div>
+          <table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Tipo</th><th>Valor</th><th>Ações</th></tr></thead>
+          <tbody id="tb-fin"></tbody></table>
+        </div>
+      </div>
+
+      <!-- RH -->
+      <div class="screen" id="screen-rh">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Equipe ativa</div></div>
+          <table><thead><tr><th>Nome</th><th>Cargo</th><th>Admissão</th><th>Telefone</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-rh"></tbody></table>
+        </div>
+      </div>
+
+      <!-- CLIENTES -->
+      <div class="screen" id="screen-cli">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Base de clientes</div>
+            <div class="search-box"><input type="text" placeholder="Buscar cliente…" oninput="searchTable('cli',this.value)"></div>
+          </div>
+          <table><thead><tr><th>Nome</th><th>CNPJ / CPF</th><th>Telefone</th><th>Email</th><th>Tipo</th><th>Ações</th></tr></thead>
+          <tbody id="tb-cli"></tbody></table>
+        </div>
+      </div>
+
+      <!-- COMPRAS -->
+      <div class="screen" id="screen-comp">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Registro de compras</div></div>
+          <table><thead><tr><th>Data</th><th>Fornecedor</th><th>Item</th><th>Qtd</th><th>Valor</th><th>Status Pgto</th><th>Ações</th></tr></thead>
+          <tbody id="tb-comp"></tbody></table>
+        </div>
+      </div>
+
+      <!-- CONFIGURAÇÕES -->
+      <div class="screen" id="screen-config">
+        <div class="config-wrap" id="config-content"></div>
+      </div>
+
+      <!-- FORM -->
+      <div class="screen" id="screen-form">
+        <div class="form-wrap" id="form-content"></div>
+      </div>
+
+      <!-- DETAIL -->
+      <div class="screen" id="screen-detail">
+        <div id="detail-content"></div>
+      </div>
+
+    </div><!-- /scroll -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- CONTRATO OVERLAY -->
+<div class="contract-overlay" id="contract-overlay" onclick="closeContractOutside(event)">
+  <div class="contract-box" id="contract-box">
+    <div class="ctopbar">
+      <button class="ctb-btn" onclick="closeContract()">← Fechar</button>
+      <div class="ctopbar-title">Contrato de Locação — MáqPro</div>
+      <button class="ctb-btn primary" onclick="printContract()">Imprimir / PDF</button>
+    </div>
+    <div id="contract-doc"></div>
+    <div id="contract-sign"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════
+function ld(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+
+let maquinas=ld('mp_maq',[
+  {id:1,cod:'M001',nome:'Retroescavadeira JCB 3CX',cat:'Escavação',marca:'JCB',serie:'SN-12345',ano:'2018',estado:'Bom',diaria:'850',semanal:'4500',mensal:'15000',local:'Depósito A',status:'locada',obs:'Revisão em dia'},
+  {id:2,cod:'M002',nome:'Miniescavadeira Caterpillar',cat:'Escavação',marca:'Caterpillar',serie:'SN-23456',ano:'2020',estado:'Ótimo',diaria:'650',semanal:'3200',mensal:'11000',local:'Depósito A',status:'disponivel',obs:''},
+  {id:3,cod:'M003',nome:'Compactador de Solo Wacker',cat:'Compactação',marca:'Wacker Neuson',serie:'SN-34567',ano:'2019',estado:'Bom',diaria:'180',semanal:'900',mensal:'3000',local:'Depósito B',status:'locada',obs:''},
+  {id:4,cod:'M004',nome:'Rolo Compactador Dynapac',cat:'Compactação',marca:'Dynapac',serie:'SN-45678',ano:'2017',estado:'Regular',diaria:'700',semanal:'3500',mensal:'12000',local:'Depósito A',status:'manutencao',obs:'Manutenção em andamento'},
+  {id:5,cod:'M005',nome:'Andaime Tubular 10m',cat:'Andaime',marca:'Layher',serie:'SN-56789',ano:'2021',estado:'Ótimo',diaria:'120',semanal:'600',mensal:'1800',local:'Depósito C',status:'locada',obs:''},
+  {id:6,cod:'M006',nome:'Betoneira 400L',cat:'Concreto',marca:'Menegotti',serie:'SN-67890',ano:'2019',estado:'Bom',diaria:'150',semanal:'750',mensal:'2500',local:'Depósito B',status:'disponivel',obs:''},
+  {id:7,cod:'M007',nome:'Gerador 40 kVA',cat:'Energia',marca:'Stemac',serie:'SN-78901',ano:'2020',estado:'Ótimo',diaria:'350',semanal:'1800',mensal:'6000',local:'Depósito A',status:'locada',obs:''},
+  {id:8,cod:'M008',nome:'Plataforma Elevatória JLG',cat:'Acesso',marca:'JLG',serie:'SN-89012',ano:'2018',estado:'Bom',diaria:'500',semanal:'2500',mensal:'8500',local:'Depósito A',status:'locada',obs:'Treinamento obrigatório'},
+]);
+let locacoes=ld('mp_loc',[
+  {id:1,contrato:'LOC-001',cliente:'Construtora Alpha',cnpj:'12.345.678/0001-90',tel:'(11) 93333-4444',maquina:'Retroescavadeira JCB 3CX',saida:'10/05/2025',retorno:'17/05/2025',valor:'5950',tipo:'Semanal',pgto:'Pix',status:'atrasada',obs:''},
+  {id:2,contrato:'LOC-002',cliente:'Empreiteira Beta',cnpj:'98.765.432/0001-10',tel:'(11) 94444-5555',maquina:'Gerador 40 kVA',saida:'08/05/2025',retorno:'22/05/2025',valor:'4900',tipo:'Semanal',pgto:'Transferência',status:'ativa',obs:''},
+  {id:3,contrato:'LOC-003',cliente:'Obras Bravo Ltda',cnpj:'11.222.333/0001-44',tel:'(11) 95555-6666',maquina:'Compactador de Solo Wacker',saida:'05/05/2025',retorno:'12/05/2025',valor:'1260',tipo:'Semanal',pgto:'Dinheiro',status:'atrasada',obs:''},
+  {id:4,contrato:'LOC-004',cliente:'Prefeitura Municipal',cnpj:'00.111.222/0001-55',tel:'(11) 93232-1010',maquina:'Plataforma Elevatória JLG',saida:'12/05/2025',retorno:'26/05/2025',valor:'7000',tipo:'Mensal',pgto:'Boleto',status:'ativa',obs:''},
+  {id:5,contrato:'LOC-005',cliente:'Silva Construções ME',cnpj:'55.444.333/0001-22',tel:'(11) 98888-7777',maquina:'Andaime Tubular 10m',saida:'01/05/2025',retorno:'31/05/2025',valor:'3600',tipo:'Mensal',pgto:'Pix',status:'ativa',obs:''},
+  {id:6,contrato:'LOC-006',cliente:'Terraplan Sul',cnpj:'33.222.111/0001-99',tel:'(11) 91111-2222',maquina:'Retroescavadeira JCB 3CX',saida:'28/04/2025',retorno:'07/05/2025',valor:'5950',tipo:'Semanal',pgto:'Pix',status:'encerrada',obs:''},
+]);
+let manutencoes=ld('mp_man',[
+  {id:1,maquina:'M004 — Rolo Compactador',tipo:'Corretiva',servico:'Reparo no sistema hidráulico',data:'10/05/2025',proxima:'10/08/2025',custo:'2200',fornecedor:'HidráulicoBR',status:'Em andamento',obs:''},
+  {id:2,maquina:'M001 — Retroescavadeira',tipo:'Preventiva',servico:'Troca de óleo e filtros',data:'02/05/2025',proxima:'02/08/2025',custo:'380',fornecedor:'Peças & Cia',status:'Concluída',obs:''},
+  {id:3,maquina:'M007 — Gerador',tipo:'Preventiva',servico:'Revisão geral e teste de carga',data:'28/04/2025',proxima:'28/07/2025',custo:'520',fornecedor:'GeradorBR',status:'Concluída',obs:''},
+]);
+let financeiro=ld('mp_fin',[
+  {id:1,data:'13/05/2025',desc:'Pagamento LOC-004 — Prefeitura',cat:'Locação',tipo:'entrada',valor:'7000',obs:''},
+  {id:2,data:'12/05/2025',desc:'Salários — maio',cat:'Salário',tipo:'saida',valor:'12600',obs:''},
+  {id:3,data:'10/05/2025',desc:'Reparo hidráulico M004',cat:'Manutenção',tipo:'saida',valor:'2200',obs:''},
+  {id:4,data:'08/05/2025',desc:'Pagamento LOC-002 — Empreiteira Beta',cat:'Locação',tipo:'entrada',valor:'4900',obs:''},
+  {id:5,data:'05/05/2025',desc:'Aluguel do galpão',cat:'Aluguel',tipo:'saida',valor:'3500',obs:''},
+  {id:6,data:'02/05/2025',desc:'Pagamento LOC-005 — Silva Construções',cat:'Locação',tipo:'entrada',valor:'3600',obs:''},
+]);
+let rh=ld('mp_rh',[
+  {id:1,nome:'Carlos Oliveira',cargo:'Operador de Máquinas',admissao:'15/03/2022',tel:'(11) 98765-4321',cpf:'000.000.000-00',salario:'3200',horario:'07h–17h',status:'Ativo',obs:''},
+  {id:2,nome:'Marcos Santos',cargo:'Mecânico',admissao:'02/07/2021',tel:'(11) 91234-5678',cpf:'111.111.111-11',salario:'3800',horario:'07h–17h',status:'Ativo',obs:''},
+  {id:3,nome:'Ana Ferreira',cargo:'Administrativo',admissao:'10/01/2023',tel:'(11) 99876-5432',cpf:'222.222.222-22',salario:'2800',horario:'08h–18h',status:'Ativo',obs:''},
+]);
+let clientes=ld('mp_cli',[
+  {id:1,nome:'Construtora Alpha Ltda',cnpj:'12.345.678/0001-90',tel:'(11) 93333-4444',email:'obras@alpha.com.br',tipo:'Construtora',end:'São Paulo, SP',obs:'Cliente prioritário'},
+  {id:2,nome:'Empreiteira Beta S/A',cnpj:'98.765.432/0001-10',tel:'(11) 94444-5555',email:'contato@beta.com.br',tipo:'Empreiteira',end:'Guarulhos, SP',obs:''},
+  {id:3,nome:'Prefeitura Municipal',cnpj:'00.111.222/0001-55',tel:'(11) 93232-1010',email:'compras@prefeitura.sp.gov.br',tipo:'Órgão público',end:'São Paulo, SP',obs:'Pagamento via boleto'},
+  {id:4,nome:'Silva Construções ME',cnpj:'55.444.333/0001-22',tel:'(11) 98888-7777',email:'silva@construcoes.com',tipo:'Pequena empresa',end:'Osasco, SP',obs:''},
+]);
+let compras=ld('mp_comp',[
+  {id:1,data:'10/05/2025',fornecedor:'Peças & Cia',item:'Kit de filtros M001',cat:'Peça mecânica',qtd:'1',valor:'380',nf:'NF-001234',pgto:'Pago',obs:''},
+  {id:2,data:'08/05/2025',fornecedor:'HidráulicoBR',item:'Mangueiras hidráulicas M004',cat:'Hidráulico',qtd:'4',valor:'1200',nf:'NF-005678',pgto:'Pago',obs:''},
+  {id:3,data:'03/05/2025',fornecedor:'OleoMáx',item:'Óleo lubrificante 20L',cat:'Lubrificante',qtd:'3',valor:'420',nf:'NF-009012',pgto:'Pago',obs:''},
+]);
+
+let nId={maq:100,loc:100,man:100,fin:100,rh:100,cli:100,comp:100};
+function saveAll(){sv('mp_maq',maquinas);sv('mp_loc',locacoes);sv('mp_man',manutencoes);sv('mp_fin',financeiro);sv('mp_rh',rh);sv('mp_cli',clientes);sv('mp_comp',compras);}
+
+function getEmpresa(){return ld('mp_empresa',{logo:'',nome:'Minha Empresa',cnpj:'00.000.000/0001-00',endereco:'Endereço da empresa',cidade:'São Paulo',estado:'SP',telefone:'(11) 99999-0000',email:'contato@minhaempresa.com.br',responsavel:'Responsável',banco:'',conta:'',pix:''});}
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+function fmt(v){return 'R$ '+parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function badgeSt(s){
+  const m={ativa:'b-green',atrasada:'b-red',encerrada:'b-gray',cancelada:'b-gray',disponivel:'b-green',locada:'b-amber',manutencao:'b-red','Ativo':'b-green','Em andamento':'b-amber','Concluída':'b-green','Agendada':'b-blue','Pago':'b-green','Pendente':'b-amber','Vencido':'b-red'};
+  const l={ativa:'Ativa',atrasada:'Atrasada',encerrada:'Encerrada',disponivel:'Disponível',locada:'Locada',manutencao:'Manutenção'};
+  return `<span class="badge ${m[s]||'b-gray'}">${l[s]||s}</span>`;
+}
+function waLink(tel){return `https://wa.me/55${(tel||'').replace(/\D/g,'')}`;}
+function emptyRow(msg,cols){return `<tr><td colspan="${cols}" style="text-align:center;padding:40px;color:var(--text3);font-size:13px">${msg}</td></tr>`;}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+let curScreen='dash';
+let navStack=['dash'];
+let editCtx=null;
+let locFiltro='todas';
+let finFiltro='todos';
+let searchQ={maq:'',loc:'',cli:''};
+
+const screenTitles={dash:'Dashboard',maq:'Máquinas',loc:'Locações',man:'Manutenção',fin:'Financeiro',rh:'Recursos Humanos',cli:'Clientes',comp:'Compras',config:'Configurações',form:'',detail:''};
+const screenBtns={
+  maq:`<button class="btn btn-primary" onclick="openForm('maq')">+ Cadastrar máquina</button>`,
+  loc:`<button class="btn btn-primary" onclick="openForm('loc')">+ Nova locação</button>`,
+  man:`<button class="btn btn-primary" onclick="openForm('man')">+ Registrar manutenção</button>`,
+  rh:`<button class="btn btn-primary" onclick="openForm('rh')">+ Nova admissão</button>`,
+  cli:`<button class="btn btn-primary" onclick="openForm('cli')">+ Novo cliente</button>`,
+  comp:`<button class="btn btn-primary" onclick="openForm('comp')">+ Nova compra</button>`,
+};
+
+function goScreen(id,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  curScreen=id; navStack=[id];
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else{
+    document.querySelectorAll('.sb-btn').forEach(b=>{
+      if((b.getAttribute('onclick')||'').includes(`'${id}'`))b.classList.add('active');
+    });
+  }
+  document.getElementById('topbar-title').textContent=screenTitles[id]||'';
+  document.getElementById('topbar-actions').innerHTML=screenBtns[id]||'';
+  document.getElementById('back-btn').style.display='none';
+  document.getElementById('scroll-area').scrollTop=0;
+  renderScreen(id);
+}
+
+function pushScreen(id,title){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  navStack.push(id); curScreen=id;
+  document.getElementById('topbar-title').textContent=title||screenTitles[id]||'';
+  document.getElementById('topbar-actions').innerHTML='';
+  document.getElementById('back-btn').style.display='flex';
+  document.getElementById('scroll-area').scrollTop=0;
+}
+
+function goBack(){
+  navStack.pop();
+  const prev=navStack[navStack.length-1]||'dash';
+  editCtx=null;
+  goScreen(prev,null);
+}
+
+function renderScreen(id){
+  if(id==='dash')renderDash();
+  else if(id==='maq')renderMaq();
+  else if(id==='loc')renderLoc();
+  else if(id==='man')renderMan();
+  else if(id==='fin')renderFin();
+  else if(id==='rh')renderRH();
+  else if(id==='cli')renderCli();
+  else if(id==='comp')renderComp();
+  else if(id==='config')renderConfig();
+}
+
+function searchTable(type,val){searchQ[type]=val.toLowerCase();renderScreen(curScreen);}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function renderDash(){
+  const locadas=maquinas.filter(m=>m.status==='locada').length;
+  const tot=maquinas.length;
+  const atras=locacoes.filter(l=>l.status==='atrasada').length;
+  const ent=financeiro.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+parseFloat(f.valor||0),0);
+  const sai=financeiro.filter(f=>f.tipo==='saida').reduce((s,f)=>s+parseFloat(f.valor||0),0);
+  const mp=manutencoes.filter(m=>m.status==='Em andamento').length;
+  document.getElementById('k-fat').textContent=fmt(ent);
+  document.getElementById('k-maq').textContent=`${locadas}/${tot}`;
+  document.getElementById('k-ocp').textContent=tot?`${Math.round(locadas/tot*100)}% ocupadas`:'';
+  document.getElementById('k-func').textContent=rh.filter(r=>r.status==='Ativo').length;
+  document.getElementById('k-manut').textContent=mp;
+  const al=document.getElementById('dash-alert');
+  if(atras>0){al.style.display='flex';al.textContent=`⚠️  ${atras} locaç${atras>1?'ões':'ão'} com retorno atrasado — entre em contato com o cliente.`;}
+  else al.style.display='none';
+  // chart
+  const meses=['Dez','Jan','Fev','Mar','Abr','Mai'];
+  const ents=[28000,31000,27000,35000,38000,ent||42800];
+  const sais=[15000,18000,14000,19000,17000,sai||18350];
+  const max=Math.max(...ents,...sais)||1;
+  document.getElementById('dash-chart').innerHTML=meses.map((_,i)=>`<div class="bar-grp"><div class="bar" style="height:${Math.round(ents[i]/max*76)}px;background:var(--green);opacity:.8"></div><div class="bar" style="height:${Math.round(sais[i]/max*76)}px;background:var(--red);opacity:.7"></div></div>`).join('');
+  document.getElementById('dash-chart-lbl').innerHTML=meses.map(m=>`<div class="chart-lbl">${m}</div>`).join('');
+  // ocupação
+  document.getElementById('dash-ocp').innerHTML=maquinas.slice(0,6).map(m=>{
+    const pct=m.status==='locada'?Math.floor(70+Math.random()*20):m.status==='manutencao'?0:Math.floor(30+Math.random()*20);
+    const cor=m.status==='locada'?'var(--amber)':m.status==='manutencao'?'var(--red)':'var(--green)';
+    return `<div class="prog-row"><div class="prog-lbl" title="${m.nome}">${m.nome.split(' ').slice(0,2).join(' ')}</div><div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${cor}"></div></div><div class="prog-pct">${pct}%</div></div>`;
+  }).join('');
+  // table
+  const ativos=locacoes.filter(l=>l.status==='ativa'||l.status==='atrasada').slice(0,6);
+  document.getElementById('dash-loc-table').innerHTML=ativos.length?ativos.map(l=>`<tr><td class="td-mono">${l.contrato}</td><td>${l.cliente}</td><td class="td-muted">${l.maquina}</td><td class="td-muted">${l.retorno}</td><td>${badgeSt(l.status)}</td></tr>`).join(''):emptyRow('Nenhuma locação ativa',5);
+  // notifs
+  const notifs=[];
+  locacoes.filter(l=>l.status==='atrasada').forEach(l=>notifs.push({cor:'var(--red)',txt:`${l.contrato} — ${l.cliente}: retorno atrasado.`,time:'Hoje'}));
+  manutencoes.filter(m=>m.status==='Em andamento').forEach(m=>notifs.push({cor:'var(--amber)',txt:`${m.maquina}: manutenção em andamento.`,time:m.data}));
+  if(!notifs.length)notifs.push({cor:'var(--green)',txt:'Tudo em ordem. Nenhum alerta no momento.',time:''});
+  document.getElementById('dash-notifs').innerHTML=notifs.map(n=>`<div class="notif"><div class="notif-dot" style="background:${n.cor}"></div><div><div class="notif-text">${n.txt}</div>${n.time?`<div class="notif-time">${n.time}</div>`:''}</div></div>`).join('');
+  // badge
+  const b=document.getElementById('badge-loc');
+  b.textContent=atras;b.style.display=atras?'':'none';
+}
+
+// ══════════════════════════════════════════
+// MÁQUINAS
+// ══════════════════════════════════════════
+function renderMaq(){
+  const q=searchQ.maq;
+  const data=maquinas.filter(m=>!q||m.nome.toLowerCase().includes(q)||m.cod.toLowerCase().includes(q));
+  document.getElementById('tb-maq').innerHTML=data.length?data.map(m=>`
+    <tr class="stripe-${m.status}">
+      <td class="td-mono">${m.cod}</td>
+      <td><strong>${m.nome}</strong></td>
+      <td class="td-muted">${m.cat}</td>
+      <td class="td-muted">${m.estado}</td>
+      <td class="td-mono" style="color:var(--accent);font-weight:600">${fmt(m.diaria)}/dia</td>
+      <td>${badgeSt(m.status)}</td>
+      <td><div class="row-acts">
+        <button class="ra-btn primary" onclick="openDetail('maq',${m.id})">Ver</button>
+        <button class="ra-btn primary" onclick="openForm('maq',${m.id})">Editar</button>
+        <button class="ra-btn danger" onclick="delItem('maq',${m.id})">Excluir</button>
+      </div></td>
+    </tr>`).join(''):emptyRow('Nenhuma máquina encontrada.',7);
+}
+
+// ══════════════════════════════════════════
+// LOCAÇÕES
+// ══════════════════════════════════════════
+function renderLoc(){
+  const q=searchQ.loc;
+  const data=locacoes.filter(l=>{
+    if(locFiltro!=='todas'&&l.status!==locFiltro)return false;
+    if(q&&!l.cliente.toLowerCase().includes(q)&&!l.maquina.toLowerCase().includes(q))return false;
+    return true;
+  });
+  document.getElementById('tb-loc').innerHTML=data.length?data.map(l=>`
+    <tr>
+      <td class="td-mono">${l.contrato}</td>
+      <td><strong>${l.cliente}</strong></td>
+      <td class="td-muted">${l.maquina}</td>
+      <td class="td-muted">${l.saida}</td>
+      <td class="td-muted">${l.retorno}</td>
+      <td class="td-mono" style="color:var(--green);font-weight:600">${fmt(l.valor)}</td>
+      <td>${badgeSt(l.status)}</td>
+      <td><div class="row-acts">
+        <button class="ra-btn green" onclick="openContract(${l.id})">📄 Contrato</button>
+        <button class="ra-btn" onclick="window.open('${waLink(l.tel)}','_blank')">WhatsApp</button>
+        <button class="ra-btn primary" onclick="openForm('loc',${l.id})">Editar</button>
+        <button class="ra-btn danger" onclick="delItem('loc',${l.id})">Excluir</button>
+      </div></td>
+    </tr>`).join(''):emptyRow('Nenhuma locação encontrada.',8);
+}
+function filterLoc(f,el){locFiltro=f;document.querySelectorAll('#loc-tabs .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderLoc();}
+
+// ══════════════════════════════════════════
+// MANUTENÇÃO
+// ══════════════════════════════════════════
+function renderMan(){
+  document.getElementById('tb-man').innerHTML=manutencoes.length?manutencoes.map(m=>`
+    <tr>
+      <td>${m.maquina}</td>
+      <td><span class="badge ${m.tipo==='Corretiva'?'b-red':m.tipo==='Preventiva'?'b-green':'b-blue'}">${m.tipo}</span></td>
+      <td>${m.servico}</td>
+      <td class="td-muted">${m.data}</td>
+      <td class="td-muted">${m.proxima}</td>
+      <td class="td-mono" style="color:var(--red)">${fmt(m.custo)}</td>
+      <td>${badgeSt(m.status)}</td>
+      <td><div class="row-acts">
+        <button class="ra-btn primary" onclick="openForm('man',${m.id})">Editar</button>
+        <button class="ra-btn danger" onclick="delItem('man',${m.id})">Excluir</button>
+      </div></td>
+    </tr>`).join(''):emptyRow('Nenhuma manutenção registrada.',8);
+}
+
+// ══════════════════════════════════════════
+// FINANCEIRO
+// ══════════════════════════════════════════
+function renderFin(){
+  const ent=financeiro.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+parseFloat(f.valor||0),0);
+  const sai=financeiro.filter(f=>f.tipo==='saida').reduce((s,f)=>s+parseFloat(f.valor||0),0);
+  document.getElementById('fin-ent').textContent=fmt(ent);
+  document.getElementById('fin-sai').textContent=fmt(sai);
+  const sal=document.getElementById('fin-sal');
+  sal.textContent=fmt(ent-sai);sal.style.color=(ent-sai)>=0?'var(--green)':'var(--red)';
+  const data=financeiro.filter(f=>finFiltro==='todos'||f.tipo===finFiltro);
+  document.getElementById('tb-fin').innerHTML=data.length?data.map(f=>`
+    <tr>
+      <td class="td-muted">${f.data}</td>
+      <td>${f.desc}</td>
+      <td class="td-muted">${f.cat}</td>
+      <td>${f.tipo==='entrada'?'<span class="badge b-green">Entrada</span>':'<span class="badge b-red">Saída</span>'}</td>
+      <td class="td-mono" style="color:${f.tipo==='entrada'?'var(--green)':'var(--red)'};font-weight:600">${fmt(f.valor)}</td>
+      <td><div class="row-acts">
+        <button class="ra-btn primary" onclick="openForm('fin',${f.id})">Editar</button>
+        <button class="ra-btn danger" onclick="delItem('fin',${f.id})">Excluir</button>
+      </div></td>
+    </tr>`).join(''):emptyRow('Nenhum lançamento.',6);
+}
+function filterFin(f,el){finFiltro=f;document.querySelectorAll('#fin-tabs .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderFin();}
+
+// ══════════════════════════════════════════
+// RH
+// ══════════════════════════════════════════
+function renderRH(){
+  document.getElementById('tb-rh').innerHTML=rh.length?rh.map(r=>`
+    <tr>
+      <td><strong>${r.nome}</strong></td>
+      <td class="td-muted">${r.cargo}</td>
+      <td class="td-muted">${r.admissao}</td>
+      <td class="td-muted">${r.tel}</td>
+      <td>${badgeSt(r.status)}</td>
+      <td><div class="row-acts">
+        <button class="ra-btn" onclick="window.open('${waLink(r.tel)}','_blank')">WhatsApp</button>
+        <button class="ra-btn primary" onclick="openForm('rh',${r.id})">Editar</button>
+        <button class="ra-btn danger" onclick="delItem('rh',${r.id})">Excluir</button>
+      </div></td>
+    </tr>`).join(''):emptyRow('Nenhum funcionário cadastrado.',6);
+}
+
+// ══════════════════════════════════════════
+// CLIENTES
+// ══════════════════════════════════════════
+function renderCli(){
+  const q=searchQ.cli;
+  const data=clientes.filter(c=>!q||c.nome.toLowerCase().includes(q)||c.cnpj.includes(q));
+  document.getElementById('tb-cli').innerHTML=data.length?data.map(c=>`
+    <tr>
+      <td><strong>${c.nome}</strong><div class="td-muted" style="margin-top:2px">${c.end||''}</div></td>
+      <td class="td-mono">${c.cnpj}</td>
+      <td class="td-muted">${c.tel}</td>
+      <td class="td-muted">${c.email}</td>
+      <td><span class="badge b-blue">${c.tipo}</span></td>
+      <td><div class="row-acts">
+        <button class="ra-btn" onclick="window.open('${waLink(c.tel)}','_blank')">WhatsApp</button>
+        <button class="ra-btn primary" onclick="openForm('loc',null,'${c.nome}')">+ Locação</button>
+        <button class="ra-btn primary" onclick="openForm('cli',${c.id})">Editar</button>
+        <button class="ra-btn danger" onclick="delItem('cli',${c.id})">Excluir</button>
+      </div></td>
+    </tr>`).join(''):emptyRow('Nenhum cliente encontrado.',6);
+}
+
+// ══════════════════════════════════════════
+// COMPRAS
+// ══════════════════════════════════════════
+function renderComp(){
+  document.getElementById('tb-comp').innerHTML=compras.length?compras.map(c=>`
+    <tr>
+      <td class="td-muted">${c.data}</td>
+      <td><strong>${c.fornecedor}</strong></td>
+      <td>${c.item}</td>
+      <td class="td-mono">${c.qtd}</td>
+      <td class="td-mono" style="color:var(--red);font-weight:600">${fmt(c.valor)}</td>
+      <td>${badgeSt(c.pgto)}</td>
+      <td><div class="row-acts">
+        <button class="ra-btn primary" onclick="openForm('comp',${c.id})">Editar</button>
+        <button class="ra-btn danger" onclick="delItem('comp',${c.id})">Excluir</button>
+      </div></td>
+    </tr>`).join(''):emptyRow('Nenhuma compra registrada.',7);
+}
+
+// ══════════════════════════════════════════
+// DELETE
+// ══════════════════════════════════════════
+function delItem(type,id){
+  if(!confirm('Excluir este registro?'))return;
+  if(type==='maq')maquinas=maquinas.filter(m=>m.id!==id);
+  else if(type==='loc')locacoes=locacoes.filter(l=>l.id!==id);
+  else if(type==='man')manutencoes=manutencoes.filter(m=>m.id!==id);
+  else if(type==='fin')financeiro=financeiro.filter(f=>f.id!==id);
+  else if(type==='rh')rh=rh.filter(r=>r.id!==id);
+  else if(type==='cli')clientes=clientes.filter(c=>c.id!==id);
+  else if(type==='comp')compras=compras.filter(c=>c.id!==id);
+  saveAll();
+  if(navStack.length>1)goBack();else renderScreen(curScreen);
+}
+
+// ══════════════════════════════════════════
+// FORMS
+// ══════════════════════════════════════════
+function gv(id){return document.getElementById(id)?.value||'';}
+function sel(opts,cur,lmap){return opts.map(o=>`<option value="${o}"${cur===o?' selected':''}>${lmap?lmap[o]||o:o}</option>`).join('');}
+function fld(label,html){return `<div class="field"><label>${label}</label>${html}</div>`;}
+function inp(id,ph,val,type='text'){return `<input id="${id}" type="${type}" placeholder="${ph}" value="${val||''}">`;}
+function sEl(id,opts,cur,lmap){return `<select id="${id}">${sel(opts,cur,lmap)}</select>`;}
+function ta(id,ph,val){return `<textarea id="${id}" placeholder="${ph}">${val||''}</textarea>`;}
+function fsec(t){return `<div class="form-section">${t}</div>`;}
+
+function openForm(type,id,prefill){
+  editCtx=id||null;
+  const fc=document.getElementById('form-content');
+  let title='Novo cadastro';
+
+  if(type==='maq'){
+    title=id?'Editar máquina':'Nova máquina';
+    const v=id?maquinas.find(m=>m.id===id):{};
+    fc.innerHTML=`<div class="form-grid">
+      ${fsec('Identificação')}
+      ${fld('Código',inp('mq-cod','M009',v.cod))}
+      ${fld('Nome do equipamento',`<input id="mq-nome" placeholder="Ex: Retroescavadeira..." value="${v.nome||''}" style="grid-column:1/-1">`)}
+      ${fld('Categoria',sEl('mq-cat',['Escavação','Compactação','Concreto','Energia','Acesso','Andaime','Transporte','Outros'],v.cat))}
+      ${fld('Marca / Modelo',inp('mq-marca','Ex: JCB 3CX',v.marca))}
+      ${fld('Nº de série',inp('mq-serie','SN-00000',v.serie))}
+      ${fld('Ano',inp('mq-ano','2022',v.ano))}
+      ${fld('Estado',sEl('mq-estado',['Ótimo','Bom','Regular','Ruim'],v.estado))}
+      ${fld('Status',sEl('mq-status',['disponivel','locada','manutencao'],v.status,{disponivel:'Disponível',locada:'Locada',manutencao:'Em manutenção'}))}
+      ${fld('Depósito / Local',inp('mq-local','Depósito A',v.local))}
+      ${fsec('Tabela de preços')}
+      ${fld('Diária (R$)',inp('mq-diaria','0,00',v.diaria,'number'))}
+      ${fld('Semanal (R$)',inp('mq-semanal','0,00',v.semanal,'number'))}
+      ${fld('Mensal (R$)',inp('mq-mensal','0,00',v.mensal,'number'))}
+      ${fsec('Obs')}
+      <div class="field field-full">${ta('mq-obs','Observações...',v.obs)}</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="goBack()">Cancelar</button>
+      ${id?`<button class="btn" style="color:var(--red)" onclick="delItem('maq',${id})">Excluir</button>`:''}
+      <button class="btn btn-primary" onclick="saveMaq()">Salvar equipamento</button>
+    </div>`;
+  }
+
+  else if(type==='loc'){
+    title=id?'Editar locação':'Nova locação';
+    const v=id?locacoes.find(l=>l.id===id):{cliente:prefill||''};
+    const cont=id?v.contrato:`LOC-${String(locacoes.length+1).padStart(3,'0')}`;
+    fc.innerHTML=`<div class="form-grid">
+      ${fsec('Dados do cliente')}
+      ${fld('Cliente / Obra',inp('lc-cli','Nome da construtora ou obra',v.cliente))}
+      ${fld('CNPJ / CPF',inp('lc-cnpj','00.000.000/0001-00',v.cnpj))}
+      ${fld('Telefone / WhatsApp',inp('lc-tel','(11) 99999-0000',v.tel,'tel'))}
+      ${fsec('Equipamento e período')}
+      ${fld('Máquina locada',inp('lc-maq','Nome da máquina',v.maquina))}
+      ${fld('Tipo',sEl('lc-tipo',['Diária','Semanal','Mensal'],v.tipo))}
+      ${fld('Data de saída',inp('lc-saida','DD/MM/AAAA',v.saida))}
+      ${fld('Retorno previsto',inp('lc-ret','DD/MM/AAAA',v.retorno))}
+      ${fld('Valor total (R$)',inp('lc-val','0,00',v.valor,'number'))}
+      ${fld('Forma de pagamento',sEl('lc-pgto',['Pix','Transferência','Boleto','Dinheiro','Cartão'],v.pgto))}
+      ${fld('Status',sEl('lc-status',['ativa','atrasada','encerrada','cancelada'],v.status,{ativa:'Ativa',atrasada:'Atrasada',encerrada:'Encerrada',cancelada:'Cancelada'}))}
+      <div class="field field-full">${fld('Observações',ta('lc-obs','Condições especiais, endereço da obra...',v.obs))}</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="goBack()">Cancelar</button>
+      ${id?`<button class="btn" style="color:var(--red)" onclick="delItem('loc',${id})">Excluir</button>`:''}
+      <button class="btn btn-green" onclick="saveLocAndContract()">Salvar e gerar contrato</button>
+      <button class="btn btn-primary" onclick="saveLoc()">Salvar locação</button>
+    </div>`;
+  }
+
+  else if(type==='man'){
+    title=id?'Editar manutenção':'Nova manutenção';
+    const v=id?manutencoes.find(m=>m.id===id):{};
+    fc.innerHTML=`<div class="form-grid">
+      ${fld('Máquina',inp('mn-maq','Ex: M001 — Retroescavadeira',v.maquina))}
+      ${fld('Tipo',sEl('mn-tipo',['Preventiva','Corretiva','Revisão'],v.tipo))}
+      ${fld('Status',sEl('mn-status',['Concluída','Em andamento','Agendada'],v.status))}
+      ${fld('Descrição do serviço',inp('mn-serv','Ex: Troca de óleo, revisão...',v.servico))}
+      ${fld('Data realizada',inp('mn-data','DD/MM/AAAA',v.data))}
+      ${fld('Próxima manutenção',inp('mn-prox','DD/MM/AAAA',v.proxima))}
+      ${fld('Fornecedor / Mecânico',inp('mn-forn','Nome da oficina',v.fornecedor))}
+      ${fld('Custo (R$)',inp('mn-custo','0,00',v.custo,'number'))}
+      <div class="field field-full">${ta('mn-obs','Peças trocadas, observações...',v.obs)}</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="goBack()">Cancelar</button>
+      ${id?`<button class="btn" style="color:var(--red)" onclick="delItem('man',${id})">Excluir</button>`:''}
+      <button class="btn btn-primary" onclick="saveMan()">Salvar</button>
+    </div>`;
+  }
+
+  else if(type==='fin'||type==='fin-entrada'||type==='fin-saida'){
+    const v=id?financeiro.find(f=>f.id===id):{};
+    const ti=type==='fin-saida'?'saida':type==='fin-entrada'?'entrada':(v.tipo||'entrada');
+    title=id?'Editar lançamento':(ti==='entrada'?'Nova entrada':'Nova saída');
+    const cats=ti==='entrada'?['Locação','Serviço prestado','Comissão','Outros']:['Salário / Pró-labore','Fornecedor','Manutenção','Aluguel','Imposto','Combustível','Outros'];
+    fc.innerHTML=`<div class="form-grid">
+      ${fld('Data',inp('fn-data','DD/MM/AAAA',v.data))}
+      ${fld('Categoria',sEl('fn-cat',cats,v.cat))}
+      <div class="field field-full">${fld('Descrição',inp('fn-desc','Ex: Pagamento LOC-001...',v.desc))}</div>
+      ${fld('Valor (R$)',inp('fn-val','0,00',v.valor,'number'))}
+      ${fld('Observação',inp('fn-obs','Ref. nota fiscal...',v.obs))}
+      <input type="hidden" id="fn-tipo" value="${ti}">
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="goBack()">Cancelar</button>
+      ${id?`<button class="btn" style="color:var(--red)" onclick="delItem('fin',${id})">Excluir</button>`:''}
+      <button class="btn btn-primary" onclick="saveFin()">Salvar</button>
+    </div>`;
+  }
+
+  else if(type==='rh'){
+    title=id?'Editar funcionário':'Nova admissão';
+    const v=id?rh.find(r=>r.id===id):{};
+    fc.innerHTML=`<div class="form-grid">
+      ${fsec('Dados pessoais')}
+      <div class="field field-full">${fld('Nome completo',inp('rh-nome','Nome do funcionário',v.nome))}</div>
+      ${fld('CPF',inp('rh-cpf','000.000.000-00',v.cpf))}
+      ${fld('Telefone',inp('rh-tel','(11) 99999-0000',v.tel,'tel'))}
+      ${fsec('Contrato')}
+      ${fld('Cargo',sEl('rh-cargo',['Operador de Máquinas','Mecânico','Motorista','Auxiliar Operacional','Administrativo','Outros'],v.cargo))}
+      ${fld('Data de admissão',inp('rh-adm','DD/MM/AAAA',v.admissao))}
+      ${fld('Salário (R$)',inp('rh-sal','0,00',v.salario,'number'))}
+      ${fld('Horário',inp('rh-hor','07h–17h',v.horario))}
+      ${fld('Status',sEl('rh-status',['Ativo','Férias','Afastado','Desligado'],v.status))}
+      <div class="field field-full">${ta('rh-obs','Habilitações, certificados...',v.obs)}</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="goBack()">Cancelar</button>
+      ${id?`<button class="btn" style="color:var(--red)" onclick="delItem('rh',${id})">Excluir</button>`:''}
+      <button class="btn btn-primary" onclick="saveRH()">Salvar funcionário</button>
+    </div>`;
+  }
+
+  else if(type==='cli'){
+    title=id?'Editar cliente':'Novo cliente';
+    const v=id?clientes.find(c=>c.id===id):{};
+    fc.innerHTML=`<div class="form-grid">
+      <div class="field field-full">${fld('Razão social / Nome',inp('cl-nome','Nome da empresa ou pessoa',v.nome))}</div>
+      ${fld('CNPJ / CPF',inp('cl-cnpj','00.000.000/0001-00',v.cnpj))}
+      ${fld('Telefone',inp('cl-tel','(11) 99999-0000',v.tel,'tel'))}
+      ${fld('E-mail',inp('cl-email','email@empresa.com.br',v.email,'email'))}
+      ${fld('Tipo',sEl('cl-tipo',['Construtora','Empreiteira','Pessoa física','Órgão público','Pequena empresa','Outros'],v.tipo))}
+      ${fld('Endereço / Região',inp('cl-end','Cidade, estado',v.end))}
+      <div class="field field-full">${ta('cl-obs','Condições especiais, histórico...',v.obs)}</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="goBack()">Cancelar</button>
+      ${id?`<button class="btn" style="color:var(--red)" onclick="delItem('cli',${id})">Excluir</button>`:''}
+      <button class="btn btn-primary" onclick="saveCli()">Salvar cliente</button>
+    </div>`;
+  }
+
+  else if(type==='comp'){
+    title=id?'Editar compra':'Nova compra';
+    const v=id?compras.find(c=>c.id===id):{};
+    fc.innerHTML=`<div class="form-grid">
+      ${fld('Data',inp('cp-data','DD/MM/AAAA',v.data))}
+      ${fld('Fornecedor',inp('cp-forn','Nome do fornecedor',v.fornecedor))}
+      <div class="field field-full">${fld('Item / Produto',inp('cp-item','Ex: Filtro de óleo...',v.item))}</div>
+      ${fld('Categoria',sEl('cp-cat',['Peça mecânica','Lubrificante','Pneu','Elétrico','Hidráulico','Ferramenta','EPI','Outros'],v.cat))}
+      ${fld('Quantidade',inp('cp-qtd','1',v.qtd,'number'))}
+      ${fld('Valor total (R$)',inp('cp-val','0,00',v.valor,'number'))}
+      ${fld('Nº Nota Fiscal',inp('cp-nf','NF-000000',v.nf))}
+      ${fld('Status pagamento',sEl('cp-pgto',['Pago','Pendente','Vencido'],v.pgto))}
+      <div class="field field-full">${ta('cp-obs','Observações...',v.obs)}</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="goBack()">Cancelar</button>
+      ${id?`<button class="btn" style="color:var(--red)" onclick="delItem('comp',${id})">Excluir</button>`:''}
+      <button class="btn btn-primary" onclick="saveComp()">Salvar compra</button>
+    </div>`;
+  }
+
+  pushScreen('form',title);
+}
+
+// ══════════════════════════════════════════
+// SAVES
+// ══════════════════════════════════════════
+function saveMaq(){
+  const o={id:editCtx||(++nId.maq),cod:gv('mq-cod'),nome:gv('mq-nome'),cat:gv('mq-cat'),marca:gv('mq-marca'),serie:gv('mq-serie'),ano:gv('mq-ano'),estado:gv('mq-estado'),status:gv('mq-status'),local:gv('mq-local'),diaria:gv('mq-diaria'),semanal:gv('mq-semanal'),mensal:gv('mq-mensal'),obs:gv('mq-obs')};
+  if(!o.nome){alert('Informe o nome do equipamento.');return;}
+  if(editCtx)maquinas=maquinas.map(m=>m.id===editCtx?o:m);else maquinas.push(o);
+  saveAll();goBack();
+}
+function saveLoc(andContract){
+  const cont=editCtx?locacoes.find(l=>l.id===editCtx)?.contrato:`LOC-${String(locacoes.length+1).padStart(3,'0')}`;
+  const o={id:editCtx||(++nId.loc),contrato:cont,cliente:gv('lc-cli'),cnpj:gv('lc-cnpj'),tel:gv('lc-tel'),maquina:gv('lc-maq'),tipo:gv('lc-tipo'),saida:gv('lc-saida'),retorno:gv('lc-ret'),valor:gv('lc-val'),pgto:gv('lc-pgto'),status:gv('lc-status'),obs:gv('lc-obs')};
+  if(!o.cliente){alert('Informe o nome do cliente.');return false;}
+  if(editCtx)locacoes=locacoes.map(l=>l.id===editCtx?o:l);else locacoes.push(o);
+  saveAll();
+  if(andContract){goScreen('loc',null);openContract(o.id);}
+  else goBack();
+  return true;
+}
+function saveLocAndContract(){saveLoc(true);}
+function saveMan(){
+  const o={id:editCtx||(++nId.man),maquina:gv('mn-maq'),tipo:gv('mn-tipo'),status:gv('mn-status'),servico:gv('mn-serv'),data:gv('mn-data'),proxima:gv('mn-prox'),custo:gv('mn-custo'),fornecedor:gv('mn-forn'),obs:gv('mn-obs')};
+  if(editCtx)manutencoes=manutencoes.map(m=>m.id===editCtx?o:m);else manutencoes.push(o);
+  saveAll();goBack();
+}
+function saveFin(){
+  const o={id:editCtx||(++nId.fin),data:gv('fn-data'),desc:gv('fn-desc'),cat:gv('fn-cat'),tipo:gv('fn-tipo'),valor:gv('fn-val'),obs:gv('fn-obs')};
+  if(!o.valor){alert('Informe o valor.');return;}
+  if(editCtx)financeiro=financeiro.map(f=>f.id===editCtx?o:f);else financeiro.push(o);
+  saveAll();goBack();
+}
+function saveRH(){
+  const o={id:editCtx||(++nId.rh),nome:gv('rh-nome'),cpf:gv('rh-cpf'),tel:gv('rh-tel'),cargo:gv('rh-cargo'),admissao:gv('rh-adm'),salario:gv('rh-sal'),horario:gv('rh-hor'),status:gv('rh-status'),obs:gv('rh-obs')};
+  if(!o.nome){alert('Informe o nome.');return;}
+  if(editCtx)rh=rh.map(r=>r.id===editCtx?o:r);else rh.push(o);
+  saveAll();goBack();
+}
+function saveCli(){
+  const o={id:editCtx||(++nId.cli),nome:gv('cl-nome'),cnpj:gv('cl-cnpj'),tel:gv('cl-tel'),email:gv('cl-email'),tipo:gv('cl-tipo'),end:gv('cl-end'),obs:gv('cl-obs')};
+  if(!o.nome){alert('Informe o nome.');return;}
+  if(editCtx)clientes=clientes.map(c=>c.id===editCtx?o:c);else clientes.push(o);
+  saveAll();goBack();
+}
+function saveComp(){
+  const o={id:editCtx||(++nId.comp),data:gv('cp-data'),fornecedor:gv('cp-forn'),item:gv('cp-item'),cat:gv('cp-cat'),qtd:gv('cp-qtd'),valor:gv('cp-val'),nf:gv('cp-nf'),pgto:gv('cp-pgto'),obs:gv('cp-obs')};
+  if(!o.item){alert('Informe o item.');return;}
+  if(editCtx)compras=compras.map(c=>c.id===editCtx?o:c);else compras.push(o);
+  saveAll();goBack();
+}
+
+// ══════════════════════════════════════════
+// DETAIL
+// ══════════════════════════════════════════
+function infoBlock(title,rows){
+  return `<div class="info-block"><div class="info-block-title">${title}</div>${rows.map(([l,v])=>`<div class="info-row"><div class="info-label">${l}</div><div class="info-val">${v||'—'}</div></div>`).join('')}</div>`;
+}
+function openDetail(type,id){
+  const dc=document.getElementById('detail-content');
+  if(type==='maq'){
+    const v=maquinas.find(m=>m.id===id);
+    dc.innerHTML=`<div class="detail-hero"><div class="detail-name">${v.nome}</div><div class="detail-sub">${v.cod} · ${v.cat}</div>${badgeSt(v.status)}</div>
+    <div class="info-grid">
+      ${infoBlock('Identificação',[['Código',v.cod],['Categoria',v.cat],['Marca / Modelo',v.marca],['Nº série',v.serie],['Ano',v.ano],['Estado',v.estado],['Depósito',v.local]])}
+      ${infoBlock('Tabela de preços',[['Diária',fmt(v.diaria)],['Semanal',fmt(v.semanal)],['Mensal',fmt(v.mensal)]])}
+    </div>
+    ${v.obs?`<div class="alert alert-info" style="margin:0 0 16px">${v.obs}</div>`:''}
+    <div class="detail-actions">
+      <button class="btn btn-primary" onclick="openForm('maq',${id})">Editar</button>
+      <button class="btn" style="color:var(--red)" onclick="delItem('maq',${id})">Excluir</button>
+    </div>`;
+  }
+  pushScreen('detail',type==='maq'?'Detalhe da máquina':'Detalhe');
+}
+
+// ══════════════════════════════════════════
+// CONFIGURAÇÕES
+// ══════════════════════════════════════════
+function renderConfig(){
+  const e=getEmpresa();
+  document.getElementById('config-content').innerHTML=`
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><div class="card-title">Dados da empresa</div></div>
+      <div style="padding:20px">
+        <div class="form-grid">
+          ${fsec('Identidade')}
+          <div class="field field-full">
+            <label style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;font-family:'Syne',sans-serif;display:block;margin-bottom:8px">Logotipo da empresa</label>
+            <div style="display:flex;align-items:center;gap:16px;padding:14px;border:1px solid var(--border);border-radius:6px;background:var(--surface2)">
+              <div id="logo-preview" style="width:100px;height:60px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text3);overflow:hidden;flex-shrink:0;background:white">${e.logo?'<img src="'+e.logo+'" style="max-width:100%;max-height:100%;object-fit:contain">':'Sem logo'}</div>
+              <div>
+                <input type="file" id="cfg-logo" accept="image/*" onchange="previewLogo(this)" style="font-size:12px;color:var(--text2)">
+                <div style="font-size:11px;color:var(--text3);margin-top:6px">PNG, JPG ou SVG &nbsp;·&nbsp; Máx 500KB &nbsp;·&nbsp; Recomendado: fundo transparente</div>
+                ${e.logo?'<button onclick="window._pendingLogo=\'\';document.getElementById(\'logo-preview\').innerHTML=\'Sem logo\';saveConfig()" style="margin-top:8px;font-size:11px;color:var(--red);background:none;border:none;cursor:pointer;padding:0">✕ Remover logotipo</button>':''}
+              </div>
+            </div>
+          </div>
+          <div class="field field-full">${fld('Nome da empresa',inp('cfg-nome','Ex: MáqPro Locações',e.nome))}</div>
+          ${fld('CNPJ',inp('cfg-cnpj','00.000.000/0001-00',e.cnpj))}
+          ${fld('Responsável',inp('cfg-resp','Nome do responsável',e.responsavel))}
+          ${fsec('Endereço e contato')}
+          <div class="field field-full">${fld('Endereço completo',inp('cfg-end','Rua, número, bairro',e.endereco))}</div>
+          ${fld('Cidade',inp('cfg-cidade','São Paulo',e.cidade))}
+          ${fld('Estado (UF)',inp('cfg-uf','SP',e.estado))}
+          ${fld('Telefone / WhatsApp',inp('cfg-tel','(11) 99999-0000',e.telefone,'tel'))}
+          ${fld('E-mail',inp('cfg-email','contato@empresa.com.br',e.email,'email'))}
+          ${fsec('Dados bancários (aparecem no contrato)')}
+          ${fld('Banco',inp('cfg-banco','Ex: Bradesco, Nubank',e.banco))}
+          ${fld('Agência / Conta',inp('cfg-conta','0001 / 12345-6',e.conta))}
+          ${fld('Chave Pix',inp('cfg-pix','CNPJ, telefone ou e-mail',e.pix))}
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
+        </div>
+        <div class="config-success" id="cfg-ok">✓ Dados salvos! Todos os contratos já usarão as novas informações.</div>
+      </div>
+    </div>`;
+}
+function previewLogo(input){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(file.size>500000){alert('Logotipo muito grande. Use uma imagem menor que 500KB.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    window._pendingLogo=e.target.result;
+    const prev=document.getElementById('logo-preview');
+    if(prev)prev.innerHTML='<img src="'+e.target.result+'" style="max-width:100%;max-height:100%;object-fit:contain">';
+  };
+  reader.readAsDataURL(file);
+}
+function saveConfig(){
+  const logoData=(window._pendingLogo!==undefined)?window._pendingLogo:(getEmpresa().logo||'');
+  const o={logo:logoData,nome:gv('cfg-nome'),cnpj:gv('cfg-cnpj'),responsavel:gv('cfg-resp'),endereco:gv('cfg-end'),cidade:gv('cfg-cidade'),estado:gv('cfg-uf'),telefone:gv('cfg-tel'),email:gv('cfg-email'),banco:gv('cfg-banco'),conta:gv('cfg-conta'),pix:gv('cfg-pix')};
+  if(!o.nome){alert('Informe o nome da empresa.');return;}
+  sv('mp_empresa',o);
+  updateBranding(o);
+  const ok=document.getElementById('cfg-ok');
+  if(ok){ok.style.display='block';setTimeout(()=>ok.style.display='none',3000);}
+}
+function updateBranding(e){
+  document.getElementById('av-init').textContent=(e.nome||'MP').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  document.getElementById('av-nome').textContent=e.nome||'MáqPro';
+}
+
+// ══════════════════════════════════════════
+// CONTRATO
+// ══════════════════════════════════════════
+let contractLocId=null;
+function openContract(locId){
+  contractLocId=locId;
+  const loc=locacoes.find(l=>l.id===locId);
+  if(!loc)return;
+  const emp=getEmpresa();
+  const hoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  function parseDMY(s){if(!s)return null;const p=s.split('/');return p.length===3?new Date(p[2],p[1]-1,p[0]):null;}
+  const dS=parseDMY(loc.saida),dR=parseDMY(loc.retorno);
+  let dias='—';
+  if(dS&&dR){const d=Math.round((dR-dS)/(864e5));dias=d+(d===1?' dia':' dias');}
+  const maqDados=maquinas.find(m=>m.nome===loc.maquina)||{};
+  const vFmt=fmt(loc.valor);
+  const saved=ld('mp_sign_'+locId,null);
+
+  document.getElementById('contract-doc').innerHTML=`
+    <div class="cdoc-header">
+      ${emp.logo?'<img src="'+emp.logo+'" style="max-height:46px;max-width:130px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto">':''}
+      <div class="cdoc-empresa">${emp.nome}</div>
+      <div class="cdoc-empresa-sub">CNPJ: ${emp.cnpj} &nbsp;|&nbsp; ${emp.telefone}</div>
+      <div class="cdoc-empresa-sub" style="margin-top:2px">${emp.endereco}${emp.cidade?', '+emp.cidade:''}${emp.estado?' - '+emp.estado:''}</div>
+    </div>
+    <div class="cdoc-title-wrap">
+      <div class="cdoc-title">Contrato de Locação de Equipamento</div>
+      <div class="cdoc-num">Nº ${loc.contrato} &nbsp;·&nbsp; Emitido em ${hoje}</div>
+    </div>
+    <div class="cdoc-body">
+      <div class="cdoc-sec"><div class="cdoc-sec-title">Locador (Proprietário do equipamento)</div>
+        <div class="cdoc-row"><span class="cdoc-lbl">Empresa</span><span class="cdoc-val">${emp.nome}</span></div>
+        <div class="cdoc-row"><span class="cdoc-lbl">CNPJ</span><span class="cdoc-val">${emp.cnpj}</span></div>
+        <div class="cdoc-row"><span class="cdoc-lbl">Endereço</span><span class="cdoc-val">${emp.endereco}${emp.cidade?', '+emp.cidade:''}${emp.estado?' - '+emp.estado:''}</span></div>
+        <div class="cdoc-row"><span class="cdoc-lbl">Telefone</span><span class="cdoc-val">${emp.telefone}</span></div>
+        <div class="cdoc-row"><span class="cdoc-lbl">Responsável</span><span class="cdoc-val">${emp.responsavel}</span></div>
+      </div>
+      <div class="cdoc-sec"><div class="cdoc-sec-title">Locatário (Cliente)</div>
+        <div class="cdoc-row"><span class="cdoc-lbl">Empresa / Nome</span><span class="cdoc-val">${loc.cliente}</span></div>
+        <div class="cdoc-row"><span class="cdoc-lbl">CNPJ / CPF</span><span class="cdoc-val">${loc.cnpj||'—'}</span></div>
+        <div class="cdoc-row"><span class="cdoc-lbl">Telefone</span><span class="cdoc-val">${loc.tel||'—'}</span></div>
+      </div>
+      <div class="cdoc-sec"><div class="cdoc-sec-title">Equipamento locado</div>
+        <div class="cdoc-row"><span class="cdoc-lbl">Equipamento</span><span class="cdoc-val">${loc.maquina}</span></div>
+        ${maqDados.cod?`<div class="cdoc-row"><span class="cdoc-lbl">Código / Série</span><span class="cdoc-val">${maqDados.cod}${maqDados.serie?' · '+maqDados.serie:''}</span></div>`:''}
+        ${maqDados.marca?`<div class="cdoc-row"><span class="cdoc-lbl">Marca / Modelo</span><span class="cdoc-val">${maqDados.marca}</span></div>`:''}
+        ${maqDados.ano?`<div class="cdoc-row"><span class="cdoc-lbl">Ano de fabricação</span><span class="cdoc-val">${maqDados.ano}</span></div>`:''}
+        <div class="cdoc-row"><span class="cdoc-lbl">Estado na saída</span><span class="cdoc-val">${maqDados.estado||'—'}</span></div>
+        ${maqDados.mensal?`<div class="cdoc-row"><span class="cdoc-lbl">Valor patrimonial ref.</span><span class="cdoc-val">${fmt(maqDados.mensal)} (base mensal)</span></div>`:''}
+      </div>
+      <div class="cdoc-hi">
+        <div class="cdoc-hi-title">Resumo da locação</div>
+        <div class="cdoc-hi-row"><span>Tipo</span><span>${loc.tipo||'—'}</span></div>
+        <div class="cdoc-hi-row"><span>Data de saída</span><span>${loc.saida||'—'}</span></div>
+        <div class="cdoc-hi-row"><span>Data de retorno</span><span>${loc.retorno||'—'}</span></div>
+        <div class="cdoc-hi-row"><span>Período total</span><span>${dias}</span></div>
+        <div class="cdoc-hi-row"><span>Forma de pagamento</span><span>${loc.pgto||'—'}</span></div>
+        ${emp.pix?`<div class="cdoc-hi-row"><span>Chave Pix</span><span>${emp.pix}</span></div>`:''}
+        ${emp.conta?`<div class="cdoc-hi-row"><span>Banco / Conta</span><span>${emp.banco||''} ${emp.conta}</span></div>`:''}
+        <div class="cdoc-hi-row total"><span>Valor total</span><span>${vFmt}</span></div>
+      </div>
+      <div class="cdoc-sec"><div class="cdoc-sec-title">Cláusulas e condições</div>
+        <div class="cdoc-clause"><strong>1. Objeto:</strong> O presente contrato tem por objeto a locação do equipamento descrito acima, de propriedade de <strong>${emp.nome}</strong>, cedido ao Locatário nas condições aqui estabelecidas.</div>
+        <div class="cdoc-clause"><strong>2. Prazo:</strong> Período de <strong>${dias}</strong>, com saída em <strong>${loc.saida||'—'}</strong> e retorno previsto para <strong>${loc.retorno||'—'}</strong>. O não retorno na data acordada implicará cobrança adicional de diária integral por dia de atraso, sem necessidade de notificação prévia.</div>
+        <div class="cdoc-clause"><strong>3. Valor e pagamento:</strong> O valor total é de <strong>${vFmt}</strong>, a ser pago via <strong>${loc.pgto||'—'}</strong>. O não pagamento no prazo acarretará multa de 10% sobre o valor em aberto, além de juros de 1% ao mês.</div>
+        <div class="cdoc-clause"><strong>4. Responsabilidade:</strong> O Locatário é integralmente responsável pelo equipamento durante todo o período de locação, incluindo danos, furto, roubo e uso inadequado. Danos serão cobrados com base no valor de reparo ou no valor patrimonial do equipamento.</div>
+        <div class="cdoc-clause"><strong>5. Conservação e devolução:</strong> O equipamento deverá ser devolvido nas mesmas condições em que foi entregue, limpo e em pleno funcionamento. Modificações, reparos ou sublocação sem autorização expressa do Locador são proibidos.</div>
+        <div class="cdoc-clause"><strong>6. Foro:</strong> As partes elegem o foro da comarca de ${emp.cidade||'São Paulo'} para dirimir quaisquer controvérsias oriundas deste contrato, com renúncia a qualquer outro, por mais privilegiado que seja.</div>
+        ${loc.obs?`<div class="cdoc-clause"><strong>Observações:</strong> ${loc.obs}</div>`:''}
+      </div>
+    </div>
+    ${saved?`<div class="sign-stamp" style="margin:0 24px 24px">
+      <div class="sign-stamp-title">✅ Contrato assinado</div>
+      <img class="sign-stamp-img" src="${saved.img}" alt="Assinatura">
+      <div class="sign-stamp-sub">Assinado por: <strong>${saved.nome}</strong>${saved.cpf?' (CPF: '+saved.cpf+')':''}</div>
+      <div class="sign-stamp-sub">Data: ${saved.data} às ${saved.hora}</div>
+    </div>`:''}`;
+
+  document.getElementById('contract-sign').innerHTML=saved?`
+    <div style="padding:0 24px 24px;display:flex;gap:10px">
+      <button class="btn" onclick="sv('mp_sign_${locId}',null);openContract(${locId})">Reasinar</button>
+    </div>`:`
+    <div class="sign-wrap">
+      <div class="sign-title">Assinatura do responsável pelo recebimento na obra</div>
+      <div class="sign-form-grid">
+        <div class="sign-field"><label>Nome de quem recebe</label><input id="sn-nome" type="text" placeholder="Nome completo"></div>
+        <div class="sign-field"><label>CPF (opcional)</label><input id="sn-cpf" type="text" placeholder="000.000.000-00"></div>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:#6B6760;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;font-family:'Syne',sans-serif">Assinatura</div>
+      <div class="sign-canvas-wrap"><canvas class="sign-canvas" id="sign-canvas" height="140"></canvas><div class="sign-ph"><span>Assine aqui com o mouse</span></div></div>
+      <div class="sign-footer">
+        <button class="sign-clear" onclick="clearSign()">Limpar</button>
+        <button class="sign-confirm" onclick="confirmSign(${locId})">✓ Confirmar recebimento</button>
+      </div>
+    </div>`;
+
+  document.getElementById('contract-overlay').classList.add('open');
+  document.getElementById('contract-box').scrollTop=0;
+  if(!saved)setTimeout(initCanvas,100);
+}
+
+function closeContract(){document.getElementById('contract-overlay').classList.remove('open');}
+function closeContractOutside(e){if(e.target===document.getElementById('contract-overlay'))closeContract();}
+
+function initCanvas(){
+  const canvas=document.getElementById('sign-canvas');
+  if(!canvas)return;
+  canvas.width=canvas.parentElement.clientWidth;
+  const ctx=canvas.getContext('2d');
+  ctx.strokeStyle='#1C1A16';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
+  let drawing=false,hasDrawn=false;
+  function pos(e){const r=canvas.getBoundingClientRect();const src=e.touches?e.touches[0]:e;return{x:src.clientX-r.left,y:src.clientY-r.top};}
+  function start(e){e.preventDefault();drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);}
+  function move(e){e.preventDefault();if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();if(!hasDrawn){hasDrawn=true;document.querySelector('.sign-ph').style.display='none';}}
+  function stop(e){e.preventDefault();drawing=false;}
+  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);canvas.addEventListener('mouseup',stop);
+  canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',move,{passive:false});canvas.addEventListener('touchend',stop,{passive:false});
+}
+
+function clearSign(){
+  const c=document.getElementById('sign-canvas');
+  if(!c)return;
+  c.getContext('2d').clearRect(0,0,c.width,c.height);
+  document.querySelector('.sign-ph').style.display='flex';
+}
+
+function confirmSign(locId){
+  const nome=document.getElementById('sn-nome')?.value?.trim();
+  if(!nome){alert('Informe o nome de quem está recebendo o equipamento.');return;}
+  const c=document.getElementById('sign-canvas');
+  const px=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+  if(!Array.from(px).some(v=>v>0)){alert('Assine no campo acima antes de confirmar.');return;}
+  const now=new Date();
+  sv('mp_sign_'+locId,{nome,cpf:document.getElementById('sn-cpf')?.value||'',img:c.toDataURL(),data:now.toLocaleDateString('pt-BR'),hora:now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})});
+  locacoes=locacoes.map(l=>l.id===locId?{...l,status:'ativa'}:l);
+  saveAll();openContract(locId);
+}
+
+function printContract(){
+  const doc=document.getElementById('contract-doc').innerHTML;
+  const sign=document.getElementById('contract-sign').innerHTML;
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Contrato MáqPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',sans-serif;color:#1C1A16;background:white;max-width:760px;margin:0 auto;padding:20px}
+  .cdoc-header{background:#1C1A16;color:white;padding:20px;border-radius:8px 8px 0 0;text-align:center}
+  .logo-print{max-height:46px;max-width:130px;object-fit:contain;display:block;margin:0 auto 8px}.cdoc-empresa{font-family:'Syne',sans-serif;font-size:18px;font-weight:700}
+  .cdoc-empresa-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+  .cdoc-title-wrap{background:#C85A1A;padding:10px 20px;text-align:center}
+  .cdoc-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:.1em}
+  .cdoc-num{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px}
+  .cdoc-body{padding:20px;border:1px solid #DDD9CE;border-top:none}
+  .cdoc-sec{margin-bottom:16px}.cdoc-sec-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#C85A1A;border-bottom:1px solid #EDEBE5;padding-bottom:5px;margin-bottom:8px}
+  .cdoc-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid #F0EDE8;font-size:12px}
+  .cdoc-lbl{color:#6B6760;width:130px;flex-shrink:0}.cdoc-val{font-weight:500;text-align:right;flex:1}
+  .cdoc-hi{background:#FDF0E8;border:1px solid #F0C4A0;border-radius:6px;padding:12px;margin-bottom:14px}
+  .cdoc-hi-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:#C85A1A;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+  .cdoc-hi-row{display:flex;justify-content:space-between;font-size:12px;padding:2px 0}
+  .cdoc-hi-row.total{font-weight:700;font-family:'Syne',sans-serif;font-size:14px;border-top:1px solid #F0C4A0;margin-top:5px;padding-top:6px;color:#C85A1A}
+  .cdoc-clause{font-size:11px;color:#4A4844;line-height:1.75;margin-bottom:8px;text-align:justify}
+  .sign-stamp{background:#E8F5EE;border:2px solid #1A6B40;border-radius:8px;padding:14px;text-align:center;margin:16px 0}
+  .sign-stamp-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#1A6B40;margin-bottom:4px}
+  .sign-stamp-img{max-width:200px;max-height:60px;margin:6px auto;display:block}
+  .sign-stamp-sub{font-size:11px;color:#1A6B40}
+  @media print{body{padding:0}}</style></head><body>${doc}${sign}</body></html>`);
+  w.document.close();setTimeout(()=>w.print(),600);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+renderDash();
+renderConfig();
+updateBranding(getEmpresa());
+window.addEventListener('beforeunload',saveAll);
+
+</script>
+</body>
+</html>
